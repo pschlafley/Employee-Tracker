@@ -1,0 +1,24 @@
+{
+  "name": "employee-tracker",
+  "version": "1.0.0",
+  "description": "Employee Database to keep track of your employees",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pschlafley/Employee-Tracker.git"
+  },
+  "author": "Peyton Schlafley",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pschlafley/Employee-Tracker/issues"
+  },
+  "homepage": "https://github.com/pschlafley/Employee-Tracker#readme",
+  "dependencies": {
+    "console.table": "^0.10.0",
+    "inquirer": "^7.3.3",
+    "mysql2": "^2.2.5"
+  }
+}
