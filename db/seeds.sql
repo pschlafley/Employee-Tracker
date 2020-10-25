@@ -34,8 +34,3 @@ VALUES
 ('Arnora', 'Duilis', 8, null),
 ('Sulesa', 'Melarg', 9, 10),
 ('Lathon', 'Aldwyr', 10, null);
--- ('Thalfin', 'Willow'),
--- ('Rianis', 'River'),
--- ('Nanir', 'Barabus'),
--- ('Andrana', 'Highbinder'),
--- ('Gandela', 'Saram');

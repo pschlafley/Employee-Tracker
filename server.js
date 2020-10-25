@@ -39,15 +39,6 @@ const welcomePrompt = () => {
     |                                                     |
     \`-----------------------------------------------------'
     `);
-    // connection.query(`SELECT * FROM employees`, function(err, res) {
-        // if (err) throw err;
-        // console.log(res);
-        // for (let i = 0; i < res.length; i++) {
-        //     let empName = res[i].first_name;
-        //     data.push(empName);
-        //     console.log(data);
-        // }
-    // });
     start();
 };
 
@@ -200,21 +191,11 @@ const addEmployee = () => {
             type: 'input',
             message: `What is this Emplopyee's Role ID? \n (1) EHS associate \n (2) EHS manager \n (3) Research Scientist \n (4) Research Manager 
  (5) Process Scientist \n (6) Process Manager \n (7) Ops Associate \n (8) Ops Manager \n (9) Sales Person \n (10) CEO \n (11) Accountant \n (12) Lawyer \n`
-            // validate: function(value) {
-            //     var valid = !isNaN(parseFloat(value));
-            //     return valid || `Please enter the Employee's Role Id Number`;
-            // },
-            // filter: Number
         },
         {
             name: 'manager',
             type: 'number',
-            message: `Who is this employee's manager? Please Enter the Manager's id number \n EHS Manager(2) \n Research Manager (4) \n Process Manager (6) \n Ops Manager (8) \n`
-            // validate: function(value) {
-            //     var valid = !isNaN(parseFloat(value));
-            //     return valid || `Please enter the Employee's Role Id Number`;
-            // },
-            // filter: Number
+            message: `Who is this employee's manager? Please Enter the Manager's id number \n (0) null \n EHS Manager(2) \n Research Manager (4) \n Process Manager (6) \n Ops Manager (8) \n`
         }
     ])
     .then((answer) => {
@@ -233,33 +214,49 @@ const addEmployee = () => {
     });
 };
 
-// const updateEmployee = (rows) => {
-//     console.log('Updating Employee... \n');
-//     connection.query(`SELECT CONCAT(employees.first_name, " ", employees.last_name) AS Employee_name FROM employees;`)
-//     connection.query(`SELECT * FROM employees;`)
-//     .then(
-//         console.log(rows),
-//         inquirer.prompt(
-//             {
-//                 type: 'list',
-//                 name: 'selectedEmp',
-//                 message: 'Which employee do you want to update?',
-//                 choices: [rows]
-//             }
-//         )
-//     )
-//     .then((answer) => {
-//         let selectedEmp = answer;
-//         inquirer.prompt([
-//             {
-//                 type: 'input',
-//                 name: 'empRoleUpdate',
-//                 message: `What is the new role for ${selectedEmp}?`
-//             }
-//         ])
-//     })
-//     .then(connection.query(`UPDATE employees SET role_id VALUES ? WHERE CONCAT(employees.first_name, " ", employees.last_name) = `))
-// };
+let names = [];
+
+const updateEmployee = (rows) => {
+    console.log('Updating Employee... \n');
+    connection.query(`SELECT CONCAT(employees.first_name, " ", employees.last_name) AS Employee_name FROM employees;`, 
+        function (err, res) {
+            if (err) throw err;
+          
+            for (let i = 0; i < res.length; i++) {
+                let name = res[i].Employee_name;
+                names.push(name);
+            }
+
+            inquirer.prompt(
+                {
+                    type: 'list',
+                    name: 'selectedEmp',
+                    message: 'Which employee do you want to update a role for?',
+                    choices: names
+                }
+            )
+            .then((response) => {
+                let selectedEmp = response;
+                inquirer.prompt({
+                    type: 'input',
+                    name: 'empRoleUpdate',
+                    message: `What is their new role?`
+                })
+                .then(
+                        connection.query(`UPDATE employees SET role_id VALUES ? WHERE CONCAT(employees.first_name, " ", employees.last_name) = ${selectedEmp};`,
+                            {
+                                role_id: response.empRole
+                            },
+                            (err, res) => {
+                                if (err) throw err;
+                                console.log(`\n ${selectedEmp}'s role updated! \n`);
+                            }
+                        )
+                );
+            });
+        }
+    )
+};
 
 const exit = () => {
     connection.end();
